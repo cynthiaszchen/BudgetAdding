@@ -74,10 +74,10 @@ class Database:
         self.conn.commit()
 
     def Add_budget(self, Date, Amount):
-        if int(Date[-2:]) > 12 or int(Date[-2:]) < 1:
-            return Status.MonthErr
-        if Amount < 0:
-            return Status.AmountIsNegative
+        #if int(Date[-2:]) > 12 or int(Date[-2:]) < 1:
+        #    return Status.MonthErr
+        #if Amount < 0:
+        #    return Status.AmountIsNegative
 
         if self.is_budget_exists(Date) is True:
             self.replace_budget(Date, Amount)
