@@ -27,5 +27,5 @@ class TestTest1():
     self.driver.find_element(By.NAME, "Amount").send_keys("5000")
     self.driver.find_element(By.CSS_SELECTOR, "input:nth-child(3)").click()
     self.driver.find_element(By.CSS_SELECTOR, "body").click()
-    assert self.driver.find_element(By.CSS_SELECTOR, "body").text == "Create budget 20190102: 5000 successfully"
+    assert self.driver.find_element(By.CSS_SELECTOR, "body").text == "Create Success"
   
