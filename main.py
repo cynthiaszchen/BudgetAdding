@@ -6,9 +6,9 @@ app = Flask(__name__)
 def index():
     return render_template("index.html")
     
-@app.route("/salvador")
-def salvador():
-    return "Hello, Salvador"
+@app.route("/set_budget", methods=['POST'])
+def set_budget():
+    return "Set budget successfully"
     
 if __name__ == "__main__":
     app.run(debug=True)
