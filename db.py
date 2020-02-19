@@ -2,14 +2,17 @@ from pathlib import Path
 import sqlite3
 
 
-DATABASE_DIR = Path("db/db.db")
+DATABASE_DIR = Path("database/db.db")
 DATABASE_DIR.parent.mkdir(exist_ok=True, parents=True)
 DATABASE_URI = str(DATABASE_DIR.absolute())
 
+class Status:
+    Create = "Create Success"
+    Update = "Update Success"
 
 class Database:
     def __init__(self):
-        self.conn = sqlite3.connect(DATABASE_URI)
+        self.conn = sqlite3.connect(DATABASE_URI, check_same_thread=False)
         self.cursor = self.conn.cursor()
 
     def create_budget_table(self):
@@ -60,11 +63,25 @@ class Database:
 
         return found
 
-if __name__ == '__main__':
-    db = Database()
-    db.reset_budget_table()
-    db.insert_budget("202002", 10000)
-    print(db.is_budget_exists("202002"))
+    def replace_budget(self, date, amount):
+        sql = """
+        UPDATE Budget SET amount = ? WHERE date = ?
+        """
+
+        self.cursor.execute(sql, (amount, date))
+        self.conn.commit()
+
+    def Add_budget(self, Date, Amount):
+        if self.is_budget_exists(Date) is True:
+            self.replace_budget(Date, Amount)
+            return Status.Update
+        else:
+            self.insert_budget(Date, Amount)
+            return Status.Create
+
+
+db = Database()
+db.reset_budget_table()
 
 
 

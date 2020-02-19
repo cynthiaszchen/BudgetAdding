@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request  
+from db import db
 
 app = Flask(__name__)
 
@@ -10,7 +11,8 @@ def index():
 def set_budget():
     data = request.values
     # call your function with data['Date'] & data['Amount']
-    status = f'Create budget {data["Date"]}: {data["Amount"]} successfully'
+    status = db.Add_budget(data['Date'], data['Amount'])
+    #status = f'Create budget {data["Date"]}: {data["Amount"]} successfully'
     return status
     
 if __name__ == "__main__":
