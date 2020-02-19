@@ -9,6 +9,8 @@ DATABASE_URI = str(DATABASE_DIR.absolute())
 class Status:
     Create = "Create Success"
     Update = "Update Success"
+    MonthErr = "Error: Month should be between 1~12"
+    AmountIsNegative = "Error: Amount should not be negative value"
 
 class Database:
     def __init__(self):
@@ -72,6 +74,11 @@ class Database:
         self.conn.commit()
 
     def Add_budget(self, Date, Amount):
+        if int(Date[-2:]) > 12 or int(Date[-2:]) < 1:
+            return Status.MonthErr
+        if Amount < 0:
+            return Status.AmountIsNegative
+
         if self.is_budget_exists(Date) is True:
             self.replace_budget(Date, Amount)
             return Status.Update
