@@ -1,4 +1,4 @@
-from flask import Flask, render_template      
+from flask import Flask, render_template, request  
 
 app = Flask(__name__)
 
@@ -6,9 +6,12 @@ app = Flask(__name__)
 def index():
     return render_template("index.html")
     
-@app.route("/salvador")
-def salvador():
-    return "Hello, Salvador"
+@app.route("/set_budget", methods=['POST'])
+def set_budget():
+    data = request.values
+    # call your function with data['Date'] & data['Amount']
+    status = f'Create budget {data["Date"]}: {data["Amount"]} successfully'
+    return status
     
 if __name__ == "__main__":
     app.run(debug=True)
