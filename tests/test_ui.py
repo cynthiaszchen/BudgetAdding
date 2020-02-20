@@ -27,7 +27,6 @@ class Test():
   def teardown_method(self, method):
     self.driver.quit()
   
-  @pytest.mark.skip(reason="No DB here")
   def test_set_budget(self):
     self.driver.get("http://127.0.0.1:5000/")
     self.driver.set_window_size(1260, 689)
