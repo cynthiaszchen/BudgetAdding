@@ -84,7 +84,3 @@ class BudgetRepo:
 
 db = BudgetRepo()
 db.reset_budget_table()
-
-
-
-

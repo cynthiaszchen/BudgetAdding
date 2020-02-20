@@ -1,5 +1,6 @@
 from db import BudgetRepo
 import datetime
+import calendar
 
 class Status:
     Create = "Create Success"
@@ -9,11 +10,9 @@ class Status:
 
 class Budget_Manager:
 
-    Day_Budget_List = []
-
     def __init__(self):
         self.db = BudgetRepo()
-        return
+
 
     def Add_budget(self, Date, Amount):
         if int(Date[-2:]) > 12 or int(Date[-2:]) < 1:
@@ -31,15 +30,32 @@ class Budget_Manager:
     def totalAmount(self, Start:datetime.datetime , End:datetime.datetime):
         BudgetDict = self.db.Get_All( )
 
+        total_amount = 0.00
+
         if not BudgetDict:
-            return 0.00
-
-        #for budget in BudgetDict:
-        #    Day_Budget_List.append()
+            return total_amount
 
 
-        if BudgetDict[int(Start.strftime('%y%m'))]:
-            return BudgetDict[int(Start.strftime('%y%m'))]
 
-        return 0.00
+        budget_per_day_dict = {}
 
+        for year_month in BudgetDict:
+            month_budget = BudgetDict[year_month]
+            year_month = str(year_month)
+            year = int(year_month[0: 4])
+            month = int(year_month[4:])
+            days_of_month = calendar.monthrange(year, month)[1]
+
+            budget_per_day = month_budget / days_of_month
+            budget_per_day_dict[year_month] = budget_per_day
+
+        for dt in daterange(Start, End):
+            year_month = dt.strftime('%Y%m')
+            total_amount += budget_per_day_dict[year_month]
+
+        return total_amount
+
+
+def daterange(date1, date2):
+    for n in range(int ((date2 - date1).days)+1):
+        yield date1 + datetime.timedelta(n)
