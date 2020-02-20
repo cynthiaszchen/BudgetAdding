@@ -6,13 +6,7 @@ DATABASE_DIR = Path("database/db.db")
 DATABASE_DIR.parent.mkdir(exist_ok=True, parents=True)
 DATABASE_URI = str(DATABASE_DIR.absolute())
 
-class Status:
-    Create = "Create Success"
-    Update = "Update Success"
-    MonthErr = "Error: Month should be between 1~12"
-    AmountIsNegative = "Error: Amount should not be negative value"
-
-class Database:
+class BudgetRepo:
     def __init__(self):
         self.conn = sqlite3.connect(DATABASE_URI, check_same_thread=False)
         self.cursor = self.conn.cursor()
@@ -73,23 +67,20 @@ class Database:
         self.cursor.execute(sql, (amount, date))
         self.conn.commit()
 
-    def Add_budget(self, Date, Amount):
-        if int(Date[-2:]) > 12 or int(Date[-2:]) < 1:
-            return Status.MonthErr
-        if int(Amount) < 0:
-            return Status.AmountIsNegative
+    def Get_All(self):
+        sql = """
+        SELECT date, amount FROM Budget 
+        """
 
-        if self.is_budget_exists(Date) is True:
-            self.replace_budget(Date, Amount)
-            return Status.Update
-        else:
-            self.insert_budget(Date, Amount)
-            return Status.Create
+        date_amount_dict = {}
+
+        for row in self.cursor.execute(sql).fetchall():
+            date = int(row[0])
+            amount = int(row[1])
+            date_amount_dict[date] = amount
+
+        return date_amount_dict
 
 
-db = Database()
+db = BudgetRepo()
 db.reset_budget_table()
-
-
-
-
