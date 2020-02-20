@@ -6,13 +6,15 @@ DATABASE_DIR = Path("database/db.db")
 DATABASE_DIR.parent.mkdir(exist_ok=True, parents=True)
 DATABASE_URI = str(DATABASE_DIR.absolute())
 
+
 class Status:
     Create = "Create Success"
     Update = "Update Success"
     MonthErr = "Error: Month should be between 1~12"
     AmountIsNegative = "Error: Amount should not be negative value"
 
-class Database:
+
+class BudgetRepo:
     def __init__(self):
         self.conn = sqlite3.connect(DATABASE_URI, check_same_thread=False)
         self.cursor = self.conn.cursor()
@@ -101,7 +103,7 @@ class Database:
         return date_amount_dict
 
 
-db = Database()
+db = BudgetRepo()
 db.reset_budget_table()
 
 
