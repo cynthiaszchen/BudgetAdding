@@ -51,6 +51,8 @@ class Budget_Manager:
 
         for dt in daterange(Start, End):
             year_month = dt.strftime('%Y%m')
+            if year_month not in budget_per_day_dict:
+                continue
             total_amount += budget_per_day_dict[year_month]
 
         return total_amount
