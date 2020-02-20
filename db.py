@@ -86,6 +86,20 @@ class Database:
             self.insert_budget(Date, Amount)
             return Status.Create
 
+    def Get_All(self):
+        sql = """
+        SELECT date, amount FROM Budget 
+        """
+
+        date_amount_dict = {}
+
+        for row in self.cursor.execute(sql).fetchall():
+            date = int(row[0])
+            amount = int(row[1])
+            date_amount_dict[date] = amount
+
+        return date_amount_dict
+
 
 db = Database()
 db.reset_budget_table()
