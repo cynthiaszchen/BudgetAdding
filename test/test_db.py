@@ -30,3 +30,17 @@ def test_verify_data_insert(date, amount):
     db.reset_budget_table()
     db.insert_budget(date, amount)
     assert db.is_budget_exists(date)
+
+
+def test_get_all_exists_one_data():
+    db.reset_budget_table()
+    db.insert_budget('202002', 31)
+    assert db.Get_All() == {202002: 31}
+
+
+def test_get_all_exists_multiple_data():
+    db.reset_budget_table()
+    db.insert_budget('202002', 450)
+    db.insert_budget('202003', 500)
+    db.insert_budget('202005', 550)
+    assert db.Get_All() == {202002: 450, 202003: 500, 202005: 550}
