@@ -9,6 +9,8 @@ from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from Model import Budget_Manager
+from datetime import datetime
 
 
 @pytest.fixture()
@@ -43,8 +45,9 @@ class Test():
     assert self.driver.find_element(By.CSS_SELECTOR, "body").text == "Create Success"
   
   def test_query_budget(self, start_date, end_date, amount):
-    db.reset_budget_table()
-    db.insert_budget(date[:6], 31)
+    budget_manager = Budget_Manager()
+    budget_manager.db.reset_budget_table()
+    budget_manager.db.insert_budget(start_date[:6], 31)
 
     self.driver.get("http://127.0.0.1:5000/query")
     self.driver.set_window_size(1260, 689)
@@ -54,8 +57,12 @@ class Test():
     self.driver.find_element(By.NAME, "end_date").send_keys(end_date)
     self.driver.find_element(By.CSS_SELECTOR, "input:nth-child(3)").click()
     self.driver.find_element(By.CSS_SELECTOR, "body").click()
-    assert self.driver.find_element(By.CSS_SELECTOR, "body").text == f"Query budget {start_date}: {end_date} successfully"
-    
+  
     # wait module
+    start_date = datetime.strptime(start_date, "%Y%m%d")
+    end_date = datetime.strptime(end_date, "%Y%m%d")
 
+    budget_manager = Budget_Manager()
+    total_amount = budget_manager.totalAmount(start_date, end_date)
+    assert self.driver.find_element(By.CSS_SELECTOR, "body").text == f"Total amout from {start_date} to {end_date} is {total_amount}0"
   
