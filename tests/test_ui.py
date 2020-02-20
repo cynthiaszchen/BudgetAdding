@@ -18,6 +18,10 @@ def start_date():
 @pytest.fixture
 def end_date():
     return '20190302'
+  
+@pytest.fixture()
+def amount():
+    return 310
 
 class Test():
   def setup_method(self, method):
@@ -38,7 +42,10 @@ class Test():
     self.driver.find_element(By.CSS_SELECTOR, "body").click()
     assert self.driver.find_element(By.CSS_SELECTOR, "body").text == "Create Success"
   
-  def test_query_budget(self, start_date, end_date):
+  def test_query_budget(self, start_date, end_date, amount):
+    db.reset_budget_table()
+    db.insert_budget(date[:6], 31)
+
     self.driver.get("http://127.0.0.1:5000/query")
     self.driver.set_window_size(1260, 689)
     self.driver.find_element(By.NAME, "start_date").click()
@@ -48,6 +55,7 @@ class Test():
     self.driver.find_element(By.CSS_SELECTOR, "input:nth-child(3)").click()
     self.driver.find_element(By.CSS_SELECTOR, "body").click()
     assert self.driver.find_element(By.CSS_SELECTOR, "body").text == f"Query budget {start_date}: {end_date} successfully"
-
+    
+    # wait module
 
   
