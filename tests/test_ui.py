@@ -10,7 +10,16 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
-class TestTest1():
+
+@pytest.fixture()
+def start_date():
+    return "20190102"
+
+@pytest.fixture
+def end_date():
+    return '20190302'
+
+class Test():
   def setup_method(self, method):
     self.driver = webdriver.Chrome()
     self.vars = {}
@@ -18,8 +27,7 @@ class TestTest1():
   def teardown_method(self, method):
     self.driver.quit()
   
-  def test_test1(self):
-    
+  def test_set_budget(self):
     self.driver.get("http://127.0.0.1:5000/")
     self.driver.set_window_size(1260, 689)
     self.driver.find_element(By.NAME, "Date").click()
@@ -29,4 +37,17 @@ class TestTest1():
     self.driver.find_element(By.CSS_SELECTOR, "input:nth-child(3)").click()
     self.driver.find_element(By.CSS_SELECTOR, "body").click()
     assert self.driver.find_element(By.CSS_SELECTOR, "body").text == "Create Success"
+  
+  def test_query_budget(self, start_date, end_date):
+    self.driver.get("http://127.0.0.1:5000/query")
+    self.driver.set_window_size(1260, 689)
+    self.driver.find_element(By.NAME, "start_date").click()
+    self.driver.find_element(By.NAME, "start_date").send_keys(start_date)
+    self.driver.find_element(By.NAME, "end_date").click()
+    self.driver.find_element(By.NAME, "end_date").send_keys(end_date)
+    self.driver.find_element(By.CSS_SELECTOR, "input:nth-child(3)").click()
+    self.driver.find_element(By.CSS_SELECTOR, "body").click()
+    assert self.driver.find_element(By.CSS_SELECTOR, "body").text == f"Query budget {start_date}: {end_date} successfully"
+
+
   
