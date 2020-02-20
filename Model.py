@@ -35,15 +35,13 @@ class Budget_Manager:
         if not BudgetDict:
             return total_amount
 
-
-
         budget_per_day_dict = {}
 
         for year_month in BudgetDict:
             month_budget = BudgetDict[year_month]
             year_month = str(year_month)
             year = int(year_month[0: 4])
-            month = int(year_month[4:])
+            month = int(year_month[4:6])
             days_of_month = calendar.monthrange(year, month)[1]
 
             budget_per_day = month_budget / days_of_month
